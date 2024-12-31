@@ -21,7 +21,6 @@ config: $(MAKE_RULE)
 	sed -i '/# NO_CBLAS = 1/s/.*/NO_CBLAS = 1/'                           $(MAKE_RULE)
 	sed -i '/# NO_LAPACKE = 1/s/.*/NO_LAPACKE = 1/'                       $(MAKE_RULE)
 	sed -i '/# FCOMMON_OPT = -frecursive/s/.*/FCOMMON_OPT = -frecursive/' $(MAKE_RULE)
-	#sed -i '/# COMMON_OPT = -O2/s/.*/COMMON_OPT = -O3/'                   $(MAKE_RULE)
 	#sed -i '/# BUILD_SINGLE = 1/s/.*/BUILD_SINGLE = 1/'                   $(MAKE_RULE)
 	#sed -i '/# BUILD_DOUBLE = 1/s/.*/BUILD_DOUBLE = 1/'                   $(MAKE_RULE)
 
