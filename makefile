@@ -41,7 +41,7 @@ $(LIB95_LAPACK):
 
 .PHONY: install 
 install:
-	rm -r $(DIR_INSTALL)
+	rm -rf $(DIR_INSTALL)
 	cp -r ./OpenBLAS/install_tmp $(DIR_INSTALL)
 	mkdir -p $(DIR_INSTALL)/mod
 	cp $(LIB95_BLAS)   $(DIR_INSTALL)/lib/
@@ -58,15 +58,23 @@ test_openblas:
 
 .PHONY: test_blas95
 test_blas95:
-	gfortran -J./installed/mod -o ./test/test_blas95 \
+	gfortran -J$(DIR_INSTALL)/mod -o ./test/test_blas95 \
 		./test/test_blas95.f90 $(LIB95_BLAS) $(LIB77) && \
 		./test/test_blas95
 
 .PHONY: test_lapack95
 test_lapack95:
-	gfortran -J./installed/mod -o ./test/test_lapack95 \
+	gfortran -J$(DIR_INSTALL)/mod -o ./test/test_lapack95 \
 		./test/test_lapack95.f90 $(LIB95_LAPACK) $(LIB77) && \
 		./test/test_lapack95
+
+clean:
+	rm -r OpenBLAS
+	rm -r interfaces
+	rm -r $(DIR_INSTALL)
+	rm ./test/test_openblas
+	rm ./test/test_blas95
+	rm ./test/test_lapack95
 
 # ToDo: combining blas95 and lapack95 interfaces into a single library (not working, maybe difficult)
 #
