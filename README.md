@@ -1,6 +1,6 @@
 # fortran-openblas-installer
 
-Installer for gfortran static library of OpenBLAS with BLAS95 and LAPACK95 interfaces
+Installer for gfortran static/shared library of OpenBLAS with BLAS95 and LAPACK95 interfaces
 
 ## Install
 
@@ -16,4 +16,4 @@ make test
 
 - Try a few times if an error occurs.
 
-- The libraries are by default to be stored in "./installed" directory.
+- The libraries are to be stored by default in "./installed" directory.

@@ -2,6 +2,7 @@ LIB77        :=./OpenBLAS/install_tmp/lib/libopenblas.a
 LIB95_BLAS   :=./interfaces/blas95/lib95/lib/libmkl_blas95_lp64.a
 LIB95_LAPACK :=./interfaces/lapack95/lib95/lib/libmkl_lapack95_lp64.a
 DIR_ONEAPI   :=/opt/intel/oneapi
+#DIR_ONEAPI   :="C:/Program Files (x86)/Intel/oneAPI"
 DIR_INSTALL  :=./installed
 MAKE_RULE    :=./OpenBLAS/Makefile.rule
 
@@ -10,7 +11,7 @@ all: openblas blas95 lapack95 install test
 openblas: $(LIB77)
 blas95  : $(LIB95_BLAS)
 lapack95: $(LIB95_LAPACK)
-test    : test_openblas test_blas95 test_lapack95
+test    : test_openblas test_blas95 test_lapack95 test_blas95_shared test_lapack95_shared
 
 $(MAKE_RULE):
 	git clone https://github.com/OpenMathLib/OpenBLAS.git
@@ -19,8 +20,8 @@ config: $(MAKE_RULE)
 	sed -i '/# FC = gfortran/s/.*/FC = gfortran/'                         $(MAKE_RULE)
 	sed -i '/# NO_CBLAS = 1/s/.*/NO_CBLAS = 1/'                           $(MAKE_RULE)
 	sed -i '/# NO_LAPACKE = 1/s/.*/NO_LAPACKE = 1/'                       $(MAKE_RULE)
-	sed -i '/# COMMON_OPT = -O2/s/.*/COMMON_OPT = -O3/'                   $(MAKE_RULE)
 	sed -i '/# FCOMMON_OPT = -frecursive/s/.*/FCOMMON_OPT = -frecursive/' $(MAKE_RULE)
+	#sed -i '/# COMMON_OPT = -O2/s/.*/COMMON_OPT = -O3/'                   $(MAKE_RULE)
 	#sed -i '/# BUILD_SINGLE = 1/s/.*/BUILD_SINGLE = 1/'                   $(MAKE_RULE)
 	#sed -i '/# BUILD_DOUBLE = 1/s/.*/BUILD_DOUBLE = 1/'                   $(MAKE_RULE)
 
@@ -41,14 +42,12 @@ $(LIB95_LAPACK):
 
 .PHONY: install 
 install:
-	rm -rf $(DIR_INSTALL)
 	cp -r ./OpenBLAS/install_tmp $(DIR_INSTALL)
-	mkdir -p $(DIR_INSTALL)/mod
 	cp $(LIB95_BLAS)   $(DIR_INSTALL)/lib/
 	cp $(LIB95_LAPACK) $(DIR_INSTALL)/lib/
-	cp ./interfaces/blas95/lib95/include/mkl/intel64/lp64/f95_precision.mod $(DIR_INSTALL)/mod/
-	cp ./interfaces/blas95/lib95/include/mkl/intel64/lp64/blas95.mod        $(DIR_INSTALL)/mod/
-	cp ./interfaces/lapack95/lib95/include/mkl/intel64/lp64/lapack95.mod    $(DIR_INSTALL)/mod/
+	cp ./interfaces/blas95/lib95/include/mkl/intel64/lp64/f95_precision.mod $(DIR_INSTALL)/include/
+	cp ./interfaces/blas95/lib95/include/mkl/intel64/lp64/blas95.mod        $(DIR_INSTALL)/include/
+	cp ./interfaces/lapack95/lib95/include/mkl/intel64/lp64/lapack95.mod    $(DIR_INSTALL)/include/
 
 .PHONY: test_openblas
 test_openblas:
@@ -56,17 +55,37 @@ test_openblas:
 		./test/test_openblas.f90 $(LIB77) && \
 		./test/test_openblas
 
+#
+# Link with OpenBLAS static library
+#
 .PHONY: test_blas95
 test_blas95:
-	gfortran -J$(DIR_INSTALL)/mod -o ./test/test_blas95 \
+	gfortran -I$(DIR_INSTALL)/include -o ./test/test_blas95 \
 		./test/test_blas95.f90 $(LIB95_BLAS) $(LIB77) && \
 		./test/test_blas95
 
 .PHONY: test_lapack95
 test_lapack95:
-	gfortran -J$(DIR_INSTALL)/mod -o ./test/test_lapack95 \
+	gfortran -I$(DIR_INSTALL)/include -o ./test/test_lapack95 \
 		./test/test_lapack95.f90 $(LIB95_LAPACK) $(LIB77) && \
 		./test/test_lapack95
+
+#
+# Link with OpenBLAS shared library
+#
+.PHONY: test_blas95_shared
+test_blas95_shared:
+	gfortran -I$(DIR_INSTALL)/include -L$(DIR_INSTALL)/lib -o ./test/test_blas95_shared \
+		./test/test_blas95.f90 $(LIB95_BLAS) -lopenblas -Wl,-rpath,$(DIR_INSTALL)/lib && \
+		./test/test_blas95_shared && \
+		ldd ./test/test_blas95_shared 
+
+.PHONY: test_lapack95_shared
+test_lapack95_shared:
+	gfortran -I$(DIR_INSTALL)/include -L$(DIR_INSTALL)/lib -o ./test/test_lapack95_shared \
+		./test/test_lapack95.f90 $(LIB95_LAPACK) -lopenblas -Wl,-rpath,$(DIR_INSTALL)/lib && \
+		./test/test_lapack95_shared && \
+		ldd ./test/test_lapack95_shared 
 
 clean:
 	rm -r OpenBLAS
