@@ -53,7 +53,7 @@ install:
 .PHONY: test_openblas
 test_openblas:
 	gfortran -o ./test/test_openblas \
-		./test/test_openblas.f90 $(LIB77) && \
+		./test/test_openblas.f90 $(DIR_INSTALL)/lib/libopenblas.a && \
 		./test/test_openblas
 
 #
@@ -62,13 +62,13 @@ test_openblas:
 .PHONY: test_blas95
 test_blas95:
 	gfortran -I$(DIR_INSTALL)/include -o ./test/test_blas95 \
-		./test/test_blas95.f90 $(LIB95_BLAS) $(LIB77) && \
+		./test/test_blas95.f90 $(DIR_INSTALL)/lib/libmkl_blas95_lp64.a $(DIR_INSTALL)/lib/libopenblas.a && \
 		./test/test_blas95
 
 .PHONY: test_lapack95
 test_lapack95:
 	gfortran -I$(DIR_INSTALL)/include -o ./test/test_lapack95 \
-		./test/test_lapack95.f90 $(LIB95_LAPACK) $(LIB77) && \
+		./test/test_lapack95.f90 $(DIR_INSTALL)/lib/libmkl_lapack95_lp64.a $(DIR_INSTALL)/lib/libopenblas.a && \
 		./test/test_lapack95
 
 #
@@ -77,14 +77,14 @@ test_lapack95:
 .PHONY: test_blas95_shared
 test_blas95_shared:
 	gfortran -I$(DIR_INSTALL)/include -L$(DIR_INSTALL)/lib -o ./test/test_blas95_shared \
-		./test/test_blas95.f90 $(LIB95_BLAS) -lopenblas -Wl,-rpath,$(DIR_INSTALL)/lib && \
+		./test/test_blas95.f90 $(DIR_INSTALL)/lib/libmkl_blas95_lp64.a -lopenblas -Wl,-rpath,$(DIR_INSTALL)/lib && \
 		./test/test_blas95_shared && \
 		ldd ./test/test_blas95_shared 
 
 .PHONY: test_lapack95_shared
 test_lapack95_shared:
 	gfortran -I$(DIR_INSTALL)/include -L$(DIR_INSTALL)/lib -o ./test/test_lapack95_shared \
-		./test/test_lapack95.f90 $(LIB95_LAPACK) -lopenblas -Wl,-rpath,$(DIR_INSTALL)/lib && \
+		./test/test_lapack95.f90 $(DIR_INSTALL)/lib/libmkl_lapack95_lp64.a -lopenblas -Wl,-rpath,$(DIR_INSTALL)/lib && \
 		./test/test_lapack95_shared && \
 		ldd ./test/test_lapack95_shared 
 
