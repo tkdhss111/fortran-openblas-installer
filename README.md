@@ -10,6 +10,7 @@ Installer for gfortran static/shared library of OpenBLAS with BLAS95 and LAPACK9
 ```
 make
 ```
+
 , or step by step installation:
 
 ```
@@ -22,5 +23,4 @@ make test
 
 ## Tips
 
-- Try a few times if an error occurs.
 - The libraries are to be stored by default in "./installed" directory.

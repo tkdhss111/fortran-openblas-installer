@@ -21,26 +21,28 @@ config: $(MAKE_RULE)
 	sed -i '/# NO_CBLAS = 1/s/.*/NO_CBLAS = 1/'                           $(MAKE_RULE)
 	sed -i '/# NO_LAPACKE = 1/s/.*/NO_LAPACKE = 1/'                       $(MAKE_RULE)
 	sed -i '/# FCOMMON_OPT = -frecursive/s/.*/FCOMMON_OPT = -frecursive/' $(MAKE_RULE)
-	#sed -i '/# BUILD_SINGLE = 1/s/.*/BUILD_SINGLE = 1/'                   $(MAKE_RULE)
-	#sed -i '/# BUILD_DOUBLE = 1/s/.*/BUILD_DOUBLE = 1/'                   $(MAKE_RULE)
+	#sed -i '/# BUILD_SINGLE = 1/s/.*/BUILD_SINGLE = 1/'                   $(MAKE_RULE) error will occur
+	#sed -i '/# BUILD_DOUBLE = 1/s/.*/BUILD_DOUBLE = 1/'                   $(MAKE_RULE) error will occur
 
 $(LIB77): config
 	cd ./OpenBLAS ; \
 	mkdir -p install_tmp ; \
-	make -j && make PREFIX="install_tmp" install
+	make && make PREFIX="install_tmp" install
 
-$(LIB95_BLAS):
-	mkdir -p interfaces
-	cp -r $(DIR_ONEAPI)/mkl/latest/share/mkl/interfaces/blas95 ./interfaces/blas95
+$(LIB95_BLAS): interfaces
 	make -j libintel64 INSTALL_DIR=lib95 FC=gfortran --directory=./interfaces/blas95
 
-$(LIB95_LAPACK):
-	mkdir -p interfaces
-	cp -r $(DIR_ONEAPI)/mkl/latest/share/mkl/interfaces/lapack95 ./interfaces/lapack95
+$(LIB95_LAPACK): interfaces
 	make -j libintel64 INSTALL_DIR=lib95 FC=gfortran --directory=./interfaces/lapack95
 
+.PHONY: interfaces
+interfaces:
+	mkdir -p interfaces
+	cp -r $(DIR_ONEAPI)/mkl/latest/share/mkl/interfaces/blas95   ./interfaces/blas95
+	cp -r $(DIR_ONEAPI)/mkl/latest/share/mkl/interfaces/lapack95 ./interfaces/lapack95
+
 .PHONY: install 
-install:
+install: $(LIB95_BLAS) $(LIB95_LAPACK)
 	cp -r ./OpenBLAS/install_tmp $(DIR_INSTALL)
 	cp $(LIB95_BLAS)   $(DIR_INSTALL)/lib/
 	cp $(LIB95_LAPACK) $(DIR_INSTALL)/lib/
@@ -87,12 +89,16 @@ test_lapack95_shared:
 		ldd ./test/test_lapack95_shared 
 
 clean:
-	rm -r OpenBLAS
 	rm -r interfaces
-	rm -r $(DIR_INSTALL)
 	rm ./test/test_openblas
 	rm ./test/test_blas95
+	rm ./test/test_blas95_shared
 	rm ./test/test_lapack95
+	rm ./test/test_lapack95_shared
+
+distclean: clean
+	rm -rf OpenBLAS
+	rm -r $(DIR_INSTALL)
 
 # ToDo: combining blas95 and lapack95 interfaces into a single library (not working, maybe difficult)
 #
