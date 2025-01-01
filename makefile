@@ -3,7 +3,7 @@ LIB95_BLAS   :=./interfaces/blas95/lib95/lib/libmkl_blas95_lp64.a
 LIB95_LAPACK :=./interfaces/lapack95/lib95/lib/libmkl_lapack95_lp64.a
 DIR_ONEAPI   :=/opt/intel/oneapi
 #DIR_ONEAPI   :="C:/Program Files (x86)/Intel/oneAPI"
-DIR_INSTALL  :=./installed
+DIR_INSTALL  :=/opt/OpenBLAS95
 MAKE_RULE    :=./OpenBLAS/Makefile.rule
 
 all: openblas blas95 lapack95 install test
@@ -42,7 +42,7 @@ interfaces:
 	cp -r $(DIR_ONEAPI)/mkl/latest/share/mkl/interfaces/lapack95 ./interfaces/lapack95
 
 .PHONY: install 
-install: $(LIB95_BLAS) $(LIB95_LAPACK)
+install:
 	cp -r ./OpenBLAS/install_tmp $(DIR_INSTALL)
 	cp $(LIB95_BLAS)   $(DIR_INSTALL)/lib/
 	cp $(LIB95_LAPACK) $(DIR_INSTALL)/lib/
@@ -98,7 +98,6 @@ clean:
 
 distclean: clean
 	rm -rf OpenBLAS
-	rm -r $(DIR_INSTALL)
 
 # ToDo: combining blas95 and lapack95 interfaces into a single library (not working, maybe difficult)
 #
