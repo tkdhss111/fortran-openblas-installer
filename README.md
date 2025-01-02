@@ -11,8 +11,13 @@ Static/shared libraries are to be stored by default in "/opt/OpenBLAS95" directo
 
 ```
 make openblas
+make interfaces
 make blas95
 make lapack95
 sudo make install
-make test
+make check
 ```
+
+# Windows
+
+Use nmake to build (nmake.exe is included in Build Tools for Visual Studio)
