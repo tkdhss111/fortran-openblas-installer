@@ -3,7 +3,6 @@ LIB95_BLAS   :=libblas95.a
 LIB95_LAPACK :=liblapack95.a
 MAKE_RULE    :=./OpenBLAS/Makefile.rule
 MKLROOT      :=/opt/intel/oneapi/mkl
-#MKLROOT   :="C:/Program Files (x86)/Intel/oneAPI/mkl"
 INSTALL_DIR  :=/home/hss/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95
 
 all: download openblas test_openblas cp_mkl blas95 test_blas95 lapack95 test_lapack95 check
@@ -31,8 +30,8 @@ config:
 	sed -i '/# NO_CBLAS = 1/s/.*/NO_CBLAS = 1/'                           $(MAKE_RULE)
 	sed -i '/# NO_LAPACKE = 1/s/.*/NO_LAPACKE = 1/'                       $(MAKE_RULE)
 	sed -i '/# FCOMMON_OPT = -frecursive/s/.*/FCOMMON_OPT = -frecursive/' $(MAKE_RULE)
-	#sed -i '/# BUILD_SINGLE = 1/s/.*/BUILD_SINGLE = 1/'                   $(MAKE_RULE) error will occur
-	#sed -i '/# BUILD_DOUBLE = 1/s/.*/BUILD_DOUBLE = 1/'                   $(MAKE_RULE) error will occur
+	#sed -i '/# BUILD_SINGLE = 1/s/.*/BUILD_SINGLE = 1/'                   $(MAKE_RULE) error may occur
+	#sed -i '/# BUILD_DOUBLE = 1/s/.*/BUILD_DOUBLE = 1/'                   $(MAKE_RULE) error may occur
 
 $(INSTALL_DIR)/lib/$(LIB77): config
 	make --directory=./OpenBLAS
@@ -48,16 +47,6 @@ test_openblas: $(INSTALL_DIR)/lib/$(LIB77)
 #
 # BLAS95 LAPACK95
 #
-
-.PHONY: cp_mkl
-cp_mkl:
-	rm -rf ./mkl
-	mkdir -p ./mkl/latest/include
-	mkdir -p ./mkl/latest/share/mkl/interfaces
-	cp    $(MKLROOT)/latest/include/mkl_blas.f90          ./mkl/latest/include/mkl_blas.f90
-	cp    $(MKLROOT)/latest/include/mkl_lapack.f90        ./mkl/latest/include/mkl_lapack.f90
-	cp -r $(MKLROOT)/latest/share/mkl/interfaces/blas95   ./mkl/latest/share/mkl/interfaces/blas95
-	cp -r $(MKLROOT)/latest/share/mkl/interfaces/lapack95 ./mkl/latest/share/mkl/interfaces/lapack95
 
 $(INSTALL_DIR)/lib/$(LIB95_BLAS):
 	cd ./mkl/latest/share/mkl/interfaces/blas95 && \
