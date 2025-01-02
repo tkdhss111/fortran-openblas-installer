@@ -7,17 +7,8 @@ Installer for gfortran static/shared library of OpenBLAS with BLAS95 and LAPACK9
 
 ## Install
 
-Static/shared libraries are to be stored by default in "/opt/OpenBLAS95" directory.
+Static/shared libraries are to be stored by default in "./OpenBLAS95" directory.
 
 ```
-make openblas
-make interfaces
-make blas95
-make lapack95
-sudo make install
-make check
+make
 ```
-
-# Windows
-
-Use nmake to build (nmake.exe is included in Build Tools for Visual Studio)
