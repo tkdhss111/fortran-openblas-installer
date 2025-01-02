@@ -1,6 +1,9 @@
 OpenBLAS/
+OpenBLAS_linux/
 OpenBLAS95/
+OpenBLAS95_linux/
 mkl/
+mkl_linux/
 mk/
 bak/
 old/

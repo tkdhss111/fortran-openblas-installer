@@ -3,7 +3,11 @@ LIB95_BLAS   :=libblas95.a
 LIB95_LAPACK :=liblapack95.a
 MAKE_RULE    :=./OpenBLAS/Makefile.rule
 MKLROOT      :=/opt/intel/oneapi/mkl
-INSTALL_DIR  :=/home/hss/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95
+ifeq ($(OS),Windows_NT)
+	INSTALL_DIR :=C:/Users/tkdhs/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95
+else
+	INSTALL_DIR :=/home/hss/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95
+endif
 
 all: download openblas test_openblas cp_mkl blas95 test_blas95 lapack95 test_lapack95 check
 
@@ -35,7 +39,7 @@ config:
 
 $(INSTALL_DIR)/lib/$(LIB77): config
 	make --directory=./OpenBLAS
-	mkdir -p $(INSTALL_DIR) && \
+	mkdir -p $(INSTALL_DIR)
 	make PREFIX=$(INSTALL_DIR) install --directory=./OpenBLAS
 
 .PHONY: test_openblas
@@ -51,14 +55,16 @@ test_openblas: $(INSTALL_DIR)/lib/$(LIB77)
 $(INSTALL_DIR)/lib/$(LIB95_BLAS):
 	cd ./mkl/latest/share/mkl/interfaces/blas95 && \
 	make libintel64 FC=gfortran INSTALL_DIR=lib95 MKLROOT=../../../..
-	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/include/mkl/intel64/lp64/blas95.mod     $(INSTALL_DIR)/include/blas95.mod
-	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/lib/libmkl_blas95_lp64.a                $(INSTALL_DIR)/lib/$(LIB95_BLAS)
+	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/include/mkl/intel64/lp64/f95_precision.mod $(INSTALL_DIR)/include/f95_precision.mod
+	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/include/mkl/intel64/lp64/blas95.mod        $(INSTALL_DIR)/include/blas95.mod
+	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/lib/libmkl_blas95_lp64.a                   $(INSTALL_DIR)/lib/$(LIB95_BLAS)
 
 $(INSTALL_DIR)/lib/$(LIB95_LAPACK):
 	cd ./mkl/latest/share/mkl/interfaces/lapack95 && \
 	make libintel64 FC=gfortran INSTALL_DIR=lib95 MKLROOT=../../../..
-	cp ./mkl/latest/share/mkl/interfaces/lapack95/lib95/include/mkl/intel64/lp64/lapack95.mod $(INSTALL_DIR)/include/lapack95.mod
-	cp ./mkl/latest/share/mkl/interfaces/lapack95/lib95/lib/libmkl_lapack95_lp64.a            $(INSTALL_DIR)/lib/$(LIB95_LAPACK)
+	cp ./mkl/latest/share/mkl/interfaces/lapack95/lib95/include/mkl/intel64/lp64/f95_precision.mod $(INSTALL_DIR)/include/f95_precision.mod
+	cp ./mkl/latest/share/mkl/interfaces/lapack95/lib95/include/mkl/intel64/lp64/lapack95.mod      $(INSTALL_DIR)/include/lapack95.mod
+	cp ./mkl/latest/share/mkl/interfaces/lapack95/lib95/lib/libmkl_lapack95_lp64.a                 $(INSTALL_DIR)/lib/$(LIB95_LAPACK)
 
 #
 # Link with OpenBLAS static library
