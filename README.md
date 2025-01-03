@@ -7,7 +7,8 @@ Installer for gfortran static/shared library of OpenBLAS with BLAS95 and LAPACK9
 
 ## Install in Linux
 
-Static/shared libraries are to be stored by default in "./OpenBLAS95" directory.
+Static/shared libraries are to be stored in INSTALL_DIR directory.
+Replace the directory full path in the makefile.
 
 ```
 make
