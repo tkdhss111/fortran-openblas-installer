@@ -19,7 +19,7 @@ To test all test files,
 make check
 ```
 
-# Install in Windows
+## Install in Windows
 
 - Install MinGW64
 - GNU makefile is used instead of the one for nmake stored in C:/Program Files (x86)/Intel/oneAPI/mkl

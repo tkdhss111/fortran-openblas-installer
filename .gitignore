@@ -12,3 +12,7 @@ build/
 app/bak/
 src/bak/
 test/bak/
+test/test_blas95.exe
+test/test_blas95_shared.exe
+test/test_lapack95.exe
+test/test_lapack95_shared.exe
