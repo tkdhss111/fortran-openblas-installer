@@ -1,0 +1,16 @@
+libdir=C:/Users/tkdhs/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95/lib
+libprefix=
+libnamesuffix=
+libsuffix=
+includedir=C:/Users/tkdhs/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95/include
+omp_opt=
+openblas_config= USE_64BITINT= DYNAMIC_ARCH= DYNAMIC_OLDER= NO_CBLAS=1 NO_LAPACK= NO_LAPACKE=1 NO_AFFINITY=1 USE_OPENMP= HASWELL MAX_THREADS=16
+version=0.3.28.dev
+extralib=-defaultlib:advapi32 -lgfortran -defaultlib:advapi32 -lgfortran
+Name: openblas
+Description: OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version
+Version: ${version}
+URL: https://github.com/xianyi/OpenBLAS
+Libs: -L${libdir} -l${libprefix}openblas${libsuffix}${libnamesuffix}
+Libs.private: ${extralib}
+Cflags: -I${includedir} ${omp_opt}

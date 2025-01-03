@@ -2,8 +2,6 @@ OpenBLAS/
 OpenBLAS_linux/
 OpenBLAS_win/
 OpenBLAS95/
-OpenBLAS95_linux/
-OpenBLAS95_win/
 mkl/
 mkl_linux/
 mkl_win/

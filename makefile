@@ -20,8 +20,12 @@ check   : test_openblas test_blas95 test_lapack95 test_blas95_shared test_lapack
 # OpenBLAS
 #
 
-download:
+download: download_openblas download_mkl
+
+download_openblas:
 	git clone https://github.com/OpenMathLib/OpenBLAS.git
+
+download_mkl:
 	mkdir -p ./mkl/latest/include
 	mkdir -p ./mkl/latest/share/mkl/interfaces
 	cp    $(MKLROOT)/latest/include/mkl_blas.f90          ./mkl/latest/include/mkl_blas.f90
@@ -43,7 +47,7 @@ $(INSTALL_DIR)/lib/$(LIB77): config
 	make PREFIX=$(INSTALL_DIR) install --directory=./OpenBLAS
 
 .PHONY: test_openblas
-test_openblas: $(INSTALL_DIR)/lib/$(LIB77)
+test_openblas:
 	gfortran -o ./test/test_openblas \
 		./test/test_openblas.f90 $(INSTALL_DIR)/lib/$(LIB77) && \
 		./test/test_openblas
@@ -70,13 +74,13 @@ $(INSTALL_DIR)/lib/$(LIB95_LAPACK):
 # Link with OpenBLAS static library
 #
 .PHONY: test_blas95
-test_blas95: $(INSTALL_DIR)/lib/$(LIB95_BLAS)
+test_blas95:
 	gfortran -I$(INSTALL_DIR)/include -o ./test/test_blas95 \
 		./test/test_blas95.f90 $(INSTALL_DIR)/lib/$(LIB95_BLAS) $(INSTALL_DIR)/lib/$(LIB77) && \
 		./test/test_blas95
 
 .PHONY: test_lapack95
-test_lapack95: $(INSTALL_DIR)/lib/$(LIB95_LAPACK)
+test_lapack95:
 	gfortran -I$(INSTALL_DIR)/include -o ./test/test_lapack95 \
 		./test/test_lapack95.f90 $(INSTALL_DIR)/lib/$(LIB95_LAPACK) $(INSTALL_DIR)/lib/$(LIB77) && \
 		./test/test_lapack95
