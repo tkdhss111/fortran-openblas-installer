@@ -57,6 +57,8 @@ test_openblas:
 #
 
 $(INSTALL_DIR)/lib/$(LIB95_BLAS):
+	mkdir -p $(INSTALL_DIR)/include
+	mkdir -p $(INSTALL_DIR)/lib
 	cd ./mkl/latest/share/mkl/interfaces/blas95 && \
 	make libintel64 FC=gfortran INSTALL_DIR=lib95 MKLROOT=../../../..
 	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/include/mkl/intel64/lp64/f95_precision.mod $(INSTALL_DIR)/include/f95_precision.mod
@@ -64,6 +66,8 @@ $(INSTALL_DIR)/lib/$(LIB95_BLAS):
 	cp ./mkl/latest/share/mkl/interfaces/blas95/lib95/lib/libmkl_blas95_lp64.a                   $(INSTALL_DIR)/lib/$(LIB95_BLAS)
 
 $(INSTALL_DIR)/lib/$(LIB95_LAPACK):
+	mkdir -p $(INSTALL_DIR)/include
+	mkdir -p $(INSTALL_DIR)/lib
 	cd ./mkl/latest/share/mkl/interfaces/lapack95 && \
 	make libintel64 FC=gfortran INSTALL_DIR=lib95 MKLROOT=../../../..
 	cp ./mkl/latest/share/mkl/interfaces/lapack95/lib95/include/mkl/intel64/lp64/f95_precision.mod $(INSTALL_DIR)/include/f95_precision.mod
@@ -105,14 +109,20 @@ test_lapack95_shared:
 clean:
 	rm -rf mkl
 	rm -f ./test/test_openblas
+	rm -f ./test/test_openblas.exe
 	rm -f ./test/test_blas95
+	rm -f ./test/test_blas95.exe
 	rm -f ./test/test_blas95_shared
+	rm -f ./test/test_blas95_shared.exe
 	rm -f ./test/test_lapack95
+	rm -f ./test/test_lapack95.exe
 	rm -f ./test/test_lapack95_shared
+	rm -f ./test/test_lapack95_shared.exe
 
 distclean: clean
 	rm -rf OpenBLAS
 	rm -rf OpenBLAS95
+	rm ./test/*.exe
 
 # ToDo: combining blas95 and lapack95 interfaces into a single library (not working, maybe difficult)
 #
