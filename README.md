@@ -21,6 +21,6 @@ make check
 
 ## Install in Windows
 
-- Install MinGW64
+- Install MinGW64 for compilation in advance
 - GNU makefile is used instead of the one for nmake stored in C:/Program Files (x86)/Intel/oneAPI/mkl
-- Try a few time if installation fails
+- Try a few times if installation fails
