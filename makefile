@@ -4,9 +4,9 @@ LIB95_LAPACK :=liblapack95.a
 MAKE_RULE    :=./OpenBLAS/Makefile.rule
 MKLROOT      :=/opt/intel/oneapi/mkl
 ifeq ($(OS),Windows_NT)
-	INSTALL_DIR :=C:/Users/tkdhs/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95
+	INSTALL_DIR :=C:/Users/tkdhs/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95_win
 else
-	INSTALL_DIR :=/home/hss/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95
+	INSTALL_DIR :=/home/hss/0_tkd/1_hss/2_tools/fortran-openblas-installer/OpenBLAS95_linux
 endif
 
 all: download openblas test_openblas cp_mkl blas95 test_blas95 lapack95 test_lapack95 check

@@ -7,8 +7,8 @@ Installer for gfortran static/shared library of OpenBLAS with BLAS95 and LAPACK9
 
 ## Install in Linux
 
-Static/shared libraries are to be stored in INSTALL_DIR directory.
-Replace the directory full path in the makefile.
+Static/shared libraries are to be stored in INSTALL_DIR directory in makefile.
+Replace it with full path.
 
 ```
 make
@@ -22,6 +22,6 @@ make check
 
 ## Install in Windows
 
-- Install MinGW64 for compilation in advance
-- GNU makefile is used instead of the one for nmake stored in C:/Program Files (x86)/Intel/oneAPI/mkl
+- Install MSYS2/MinGW64 for compilation in advance
+- GNU makefile is used instead of nmake makefile stored in C:/Program Files (x86)/Intel/oneAPI/mkl
 - Try a few times if installation fails
